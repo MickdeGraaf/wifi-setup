@@ -15,6 +15,19 @@ var index = fs.readFileSync('src/index.html', 'utf8');
 // respond with "hello world" when a GET request is made to the homepage
 app.all('/', function (req, res) {
 
+
+  //if network present in post vars
+  if(req.body.network) {
+      piWifi.connect(req.body.network, req.body.password, function(err) {
+      if (err) {
+          return console.error(err.message);
+      }
+          console.log('Successful connection!');
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.end("SUBMITTED");
+      });
+  }
+
   piWifi.scan(function(err, networks) {
       if (err) {
           //res.writeHead(200, {'Content-Type': 'text/html'});
@@ -36,16 +49,10 @@ app.all('/', function (req, res) {
       res.end(index.replace("[OPTIONS]", networkOptions));
 
 
-      //if network present in post vars
-      if(req.body.network) {
-          piWifi.connect(req.body.network, req.body.password, function(err) {
-          if (err) {
-              return console.error(err.message);
-          }
-              console.log('Successful connection!');
-          });
-      }
   });
+
+
+
 
 
 })
