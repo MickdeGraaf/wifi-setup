@@ -9,12 +9,10 @@ const port = 3000;
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-
 var index = fs.readFileSync('src/index.html', 'utf8');
 
 // respond with "hello world" when a GET request is made to the homepage
 app.all('/', function (req, res) {
-
 
   //if network present in post vars
   if(req.body.network) {
@@ -25,6 +23,7 @@ app.all('/', function (req, res) {
           console.log('Successful connection!');
           res.writeHead(200, {'Content-Type': 'text/html'});
           res.end("SUBMITTED");
+          return;
       });
   }
 
@@ -50,10 +49,6 @@ app.all('/', function (req, res) {
 
 
   });
-
-
-
-
 
 })
 
