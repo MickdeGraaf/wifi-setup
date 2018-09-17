@@ -12,14 +12,22 @@ var index = fs.readFileSync('src/index.html');
 app.all('/', function (req, res) {
 
   piWifi.scan(function(err, networks) {
-  if (err) {
-      return console.error(err.message);
-  }
-    console.log(networks);
+    if (err) {
+        return console.error(err.message);
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end(":(");
+    }
+
+    let networkOptions = "";
+    networks.forEach(function(network) {
+        networkOptions += "<option value='" + network.ssid + "'>" + network.ssid +  "</option>";
+    });
+
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.end(index.replace("[OPTIONS]", networkOptions));
   });
 
-  res.writeHead(200, {'Content-Type': 'text/html'});
-  res.end(index);
+
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
